@@ -10,19 +10,48 @@ namespace BasicCSharpConsoleNET.Exercises
 
     public class StringConcat
     {
+        public int Numb { get; set; }
+
+
         public void Execute()
         {
-            var test = new StringConcat();
-            var loopCount = 500_000;
+            var stringConcat = new StringConcat();
+            var loopCount = 10_000;
             var timer = Stopwatch.StartNew();
 
-            test.ConcatUsingString(loopCount);
+            stringConcat.ConcatUsingString(loopCount);
             Console.WriteLine($"Concatenating strings took {timer.ElapsedMilliseconds} ms.");
             timer.Restart();
-            test.ConcatWithStringBuilder(loopCount);
+            stringConcat.ConcatWithStringBuilder(loopCount);
             Console.WriteLine($"Concatenating StringBuilder took {timer.ElapsedMilliseconds} ms.");
             //timer.Reset();
 
+            var i = 3; //int - valueType
+            ModifyInt(i);
+
+
+            Console.WriteLine(i); //3
+
+            StringConcat sc2;
+
+            //sc2.Execute();
+
+
+            stringConcat.Numb = 3;
+            ModifyRef(stringConcat);
+
+            Console.WriteLine(stringConcat.Numb);  //5
+        }
+
+
+        void ModifyInt(int number) //3
+        {
+            number = number + 5; //8
+        }
+
+        void ModifyRef(StringConcat sc)
+        {
+            sc.Numb = 5;
         }
 
         public void ConcatUsingString(int count)
