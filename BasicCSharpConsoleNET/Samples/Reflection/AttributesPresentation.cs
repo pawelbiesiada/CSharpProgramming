@@ -21,7 +21,7 @@ namespace BasicCSharpConsoleNET.Samples.Reflection
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
     public class UpdateMethodAttribute : Attribute
     {
         public UpdateMethodAttribute(int sequence, params UpdateProfile[] profiles)

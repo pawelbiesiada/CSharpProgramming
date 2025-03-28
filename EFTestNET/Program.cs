@@ -31,6 +31,17 @@ namespace EFTestNET
             {
                 try
                 {
+
+                    var users = dbCtx.Users.Where(x => x.Id > 10).ToList();
+
+                    var userGroups = dbCtx.Users
+                            .SelectMany(x => x.UserGroups
+                                .Select(ug => new { 
+                                    UserName = ug.User.Name, 
+                                    UserGroup = ug.Group.Name }))
+                            .ToList();
+
+
                     //dbCtx.Users.RemoveRange(dbCtx.Users);
                     //dbCtx.Groups.RemoveRange(dbCtx.Groups);
                     //dbCtx.UserGroups.RemoveRange(dbCtx.UserGroups);
@@ -38,7 +49,8 @@ namespace EFTestNET
                     var userId = dbCtx.Users.Max(el => el.Id);
                     var groupId = dbCtx.Groups.Max(el => el.Id);
 
-                    var user = dbCtx.Users.Add(new User { Name = "John", Password = "Password", IsActive = true });
+                    var user = dbCtx.Users
+                        .Add(new User { Name = "John", Password = "Password", IsActive = true });
 
                     EntityEntry<Group> group = null;
                     if (!dbCtx.Groups.Any(el => el.Name == "Administrator"))

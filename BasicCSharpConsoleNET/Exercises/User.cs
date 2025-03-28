@@ -16,6 +16,11 @@ namespace BasicCSharpConsoleNET.Exercises
 
         public UserRole[] Roles { get; set; }
 
+        public override string ToString()
+        {
+            return Id + ":" + Name;
+        }
+
         public override bool Equals(object obj)
         {
             var user = obj as User;

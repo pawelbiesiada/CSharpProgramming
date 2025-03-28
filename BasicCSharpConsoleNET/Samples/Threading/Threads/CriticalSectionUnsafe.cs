@@ -31,17 +31,22 @@ namespace BasicCSharpConsoleNET.Samples.Threading.Threads
             Console.WriteLine("Thread2 executed the loop {0:N0} times", _thread2Counter);
             Console.WriteLine("Both Thread1 & Thread2 executed the loop {0:N0} times", (_thread1Counter + _thread2Counter));
             Console.WriteLine("CommonCounter was increased {0:N0} times", _commonCounter);
-            Console.WriteLine("InterlockedCommonCounter was increased {0:N0} times", _interlockedCommonCounter);
             Console.ReadKey();
         }
+
+        private object _myLocker = new object();
 
         private void Increment1()
         {
             while (_commonCounter < 10_000_000)
             {
+                lock (_myLocker)
+                {
+                    if (_commonCounter >= 10_000_000)
+                        break;
+                    _commonCounter++;
+                }
 
-                _commonCounter++;
-                Interlocked.Increment(ref _interlockedCommonCounter);
                 _thread1Counter++;
             }
         }
@@ -50,8 +55,12 @@ namespace BasicCSharpConsoleNET.Samples.Threading.Threads
         {
             while (_commonCounter < 10_000_000)
             {
-                _commonCounter++;
-                Interlocked.Increment(ref _interlockedCommonCounter);
+                lock (_myLocker)
+                {
+                    if (_commonCounter >= 10_000_000)
+                        break;
+                    _commonCounter++;
+                }
                 _thread2Counter++;
             }
         }

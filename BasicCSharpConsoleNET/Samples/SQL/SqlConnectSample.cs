@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace BasicCSharpConsoleNET.Samples.SQL
 {
@@ -41,11 +41,11 @@ namespace BasicCSharpConsoleNET.Samples.SQL
 
         public void Execute()
         {
-            GetRecordsWithSelect();
+            GetRecordsWithSelect("10");
             ExecuteProcedure();
         }
 
-        private void GetRecordsWithSelect()
+        private void GetRecordsWithSelect(string id)
         {
             var connStr = _connectionStringProvider.GetConnectionSting();
             if (string.IsNullOrEmpty(connStr))
@@ -60,14 +60,28 @@ namespace BasicCSharpConsoleNET.Samples.SQL
                     connection.Open();
 
                     var command = connection.CreateCommand();
-                    command.CommandText = "SELECT * FROM  Users";
+                    command.CommandText = "SELECT * FROM  Users WHERE Id > @idPar";
+                    //command.CommandText = "SELECT * FROM  Users WHERE Id > " + id;
+                    // id = "10"    id="10; DROP DATABASE EFTestDb"
+
+
+                    var sql = @"SELECT u.Name 'UserName', g.Name 'GroupName' FROM Users u 
+                                JOIN UserGroups ug
+                                    ON ug.UserId = u.Id
+                                JOIN Groups g
+                                    ON ug.GroupId = g.Id";
+
+                    var isActiveParameter = command.CreateParameter();
+                    isActiveParameter.DbType = DbType.Int32;
+                    isActiveParameter.ParameterName = "@idPar";
+                    isActiveParameter.Value = id;
 
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
                         var idCol = (int)reader["Id"];
-                        var nameCol = (string)reader["Name"];
+                        var nameCol = reader.GetString("Name");
                         Console.WriteLine($"{idCol} : {nameCol}");
                     }
                 }
