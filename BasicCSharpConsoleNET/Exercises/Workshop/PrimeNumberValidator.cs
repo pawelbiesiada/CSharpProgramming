@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BasicCSharpConsoleNET.Exercises.Workshop
 {
-    internal class PrimeNumberValidator
+    public class PrimeNumberValidator   //[InternalsVisibleTo]
     {
-        public static void Execute(int liczba)
+        public void Execute(int liczba)
         {
             //int liczba = 11;
-
+            PrintHi();
             var result = string.Empty;
 
             result = SprawdzCzyPierwsza(liczba) ? "To liczba pierwsza!" : "To NIE JEST liczba pierwsza!";
@@ -19,7 +19,7 @@ namespace BasicCSharpConsoleNET.Exercises.Workshop
             Console.WriteLine(string.Empty);
         }
 
-        private static bool SprawdzCzyPierwsza(int X)
+        public bool SprawdzCzyPierwsza(int X)
         {
             if(X < 0) return false;
 
@@ -38,6 +38,11 @@ namespace BasicCSharpConsoleNET.Exercises.Workshop
                 return true;
             else
                 return false;
+        }
+
+        private void PrintHi()
+        {
+            Console.WriteLine("Hi");
         }
     }
 }
